@@ -14,7 +14,7 @@
     </v-app-bar>
 
     <v-main class="test">
-      <v-navigation-drawer v-model="drawer" absolute bottom temporary>
+      <v-navigation-drawer v-model="drawer" fixed  bottom temporary>
         <template v-slot:prepend>
           <v-list-item two-line>
             <v-list-item-avatar>
@@ -57,7 +57,7 @@ export default {
 
   components: {},
   data: () => ({
-    drawer: false,
+    drawer: true,
     group: null,
     messages: 0,
     items: [
@@ -80,6 +80,7 @@ export default {
 
 <style >
 .test {
+  position: relative;
   background: #e2e8f0;
 }
 </style>
