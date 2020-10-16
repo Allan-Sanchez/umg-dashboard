@@ -14,33 +14,39 @@
     </v-app-bar>
 
     <v-main class="test">
-      <v-navigation-drawer v-model="drawer" fixed  bottom temporary>
-        <template v-slot:prepend>
-          <v-list-item two-line>
-            <v-list-item-avatar>
-              <img src="https://randomuser.me/api/portraits/women/81.jpg" />
-            </v-list-item-avatar>
+      <v-navigation-drawer v-model="drawer" fixed app bottom temporary>
+          <template v-slot:prepend>
+            <v-list-item two-line>
+              <v-list-item-avatar>
+                <img src="https://randomuser.me/api/portraits/women/81.jpg" />
+              </v-list-item-avatar>
 
-            <v-list-item-content>
-              <v-list-item-title>Jane Smith</v-list-item-title>
-              <v-list-item-subtitle>Logged In</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
+              <v-list-item-content>
+                <v-list-item-title>Jane Smith</v-list-item-title>
+                <v-list-item-subtitle>Logged In</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
 
-        <v-divider></v-divider>
+          <v-divider></v-divider>
 
-        <v-list dense>
-          <v-list-item v-for="item in items" :key="item.title">
-            <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
+          <v-list dense>
+            <v-list-item v-for="item in items" :key="item.title" :to="item.slug">
+              <!-- <div class="d-flex menu"> -->
 
-            <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
+              <v-list-item-icon>
+                <v-icon>
+                  {{ item.icon }}
+                  </v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item-content>
+
+              <!-- </div> -->
+            </v-list-item>
+          </v-list>
       </v-navigation-drawer>
       <!-- Provides the application the proper gutter -->
       <v-container fluid>
@@ -61,11 +67,11 @@ export default {
     group: null,
     messages: 0,
     items: [
-      { title: "Home", icon: "mdi-home-city" },
-      { title: "Usuarios", icon: "mdi-account-group-outline" },
-      { title: "Facultades", icon: "mdi-book" },
-      { title: "Calendarios", icon: "mdi-calendar" },
-      { title: "Eventos", icon: "mdi-balloon" },
+      {slug:'/', title: "Home", icon: "mdi-home-city" },
+      {slug:'/usuarios', title: "Usuarios", icon: "mdi-account-group-outline" },
+      {slug:'/facultades', title: "Facultades", icon: "mdi-book" },
+      {slug:'/calendarios', title: "Calendarios", icon: "mdi-calendar" },
+      {slug:'/eventos', title: "Eventos", icon: "mdi-balloon" },
       // { title: "My Account", icon: "mdi-account" },
     ],
   }),
@@ -80,7 +86,7 @@ export default {
 
 <style >
 .test {
-  position: relative;
+  position: relative !important;
   background: #e2e8f0;
 }
 </style>
