@@ -14,6 +14,23 @@
               label="Titulo de Acontesimieto"
               required
             ></v-text-field>
+
+            <div id="category-select">
+              <v-select
+                :items="category.items"
+                v-model="category.selected"
+                label="Selecciona una categoria"
+              ></v-select>
+            </div>
+
+            <div id="faculty-select">
+              <v-select
+                :items="faculty.items"
+                v-model="faculty.selected"
+                label="Selecciona una Facultad"
+              ></v-select>
+            </div>
+
             <v-menu
               v-model="menu2"
               :close-on-content-click="false"
@@ -67,6 +84,24 @@ export default {
         (v) => !!v || "Name is required",
         (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
       ],
+      category: {
+        selected: "",
+        items: [
+          "Dia de Asueto",
+          "Inicio de clases",
+          "Fecha de Inscripciones",
+          "Evaluaciones",
+        ],
+      },
+      faculty: {
+        selected: "",
+        items: [
+          "Ingenieria en sistemas",
+          "Economia",
+          "Medicina",
+          "Trabo social",
+        ],
+      },
       date: new Date().toISOString().substr(0, 10),
       menu2: false,
     };

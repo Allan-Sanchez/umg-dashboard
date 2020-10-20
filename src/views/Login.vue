@@ -21,19 +21,19 @@
         <v-card-text>
           <v-form ref="form" v-model="valid" lazy-validation class="mx-10">
             <h1 class="text-center">Login</h1>
-            <v-text-field
-              v-model="name"
-              :counter="15"
-              :rules="nameRules"
-              label="Name"
-              autofocus
-              required
-            ></v-text-field>
-
+            
             <v-text-field
               v-model="email"
               :rules="emailRules"
               label="E-mail"
+              required
+            ></v-text-field>
+
+            <v-text-field
+              v-model="password"
+              type="password"
+              label="Password"
+              autofocus
               required
             ></v-text-field>
 
@@ -54,11 +54,7 @@ export default {
   data() {
     return {
       valid: true,
-      name: "",
-      nameRules: [
-        (v) => !!v || "Name is required",
-        (v) => (v && v.length <= 15) || "Name must be less than 15 characters",
-      ],
+      password:'',
       email: "",
       emailRules: [
         (v) => !!v || "E-mail is required",
