@@ -1,13 +1,14 @@
 <template>
-  <v-row>
+  <v-row class="test">
     <v-spacer></v-spacer>
     <v-col md="4">
       <v-card elevation="4">
         <v-card-title class="d-flex justify-center text-md-h3 mb-4">
-          <div class="d-flex justify-center">
+          <div class="d-flex justify-center redirect" @click="back()">
             <!-- <v-avatar size="150"> -->
+
             <v-img
-              src="../assets/UMG.png"
+              src="../../assets/UMG.png"
               max-height="170"
               max-width="170"
               alt="John"
@@ -26,6 +27,7 @@
               v-model="email"
               :rules="emailRules"
               label="E-mail"
+              autofocus
               required
             ></v-text-field>
 
@@ -33,8 +35,7 @@
               v-model="password"
               type="password"
               label="Password"
-              autofocus
-              required
+             required
             ></v-text-field>
 
             <v-btn block color="primary" class="mr-4 my-6 py-5" @click="Login">
@@ -64,6 +65,14 @@ export default {
   },
   methods: {
     Login() {},
+    back(){
+      this.$router.push('/')
+    }
   },
 };
 </script>
+<style >
+  .redirect{
+    cursor: pointer;
+  }
+</style>
