@@ -13,6 +13,11 @@ const routes = [
     component: Home,
     children:[
       {
+        path: '/',
+        name: 'Guest-home',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Invitado/HomePage.vue')
+      },
+      {
         path: 'eventos',
         name: 'Guest-event',
         component: () => import(/* webpackChunkName: "about" */ '../views/Invitado/Events.vue')

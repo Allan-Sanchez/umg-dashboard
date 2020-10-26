@@ -21,6 +21,6 @@ export default {
 
 <style >
 .test {
-  background: #e2e8f0;
+  /* background: #e2e8f0; */
 }
 </style>

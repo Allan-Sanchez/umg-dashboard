@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar  app color="primary" dark>
-      <div class="d-flex align-center">
-        <h1 class="mr-3">UMG</h1>
+  <v-app-bar  app dark color="primary">
+      <div @click="redict()" class="d-flex align-center" style="cursor:pointer;">
+        <h1  class="mr-3 title-nav">UMG</h1>
       </div>
 
       <v-spacer></v-spacer>
@@ -19,10 +19,22 @@
 
 <script>
 export default {
-    name:"NavbarInvitado"
+    name:"NavbarInvitado",
+    methods: {
+      redict(){
+        this.$router.push('/');
+      }
+    },
 }
 </script>
 
 <style>
-
+.title-nav{
+  font-family: "Montserrat",sans-serif !important;
+  font-size: 32px;
+  margin-left: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  /* color: #EDF2F7 !important; */
+}
 </style>
