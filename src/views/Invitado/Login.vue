@@ -20,7 +20,7 @@
           </div>
         </v-card-title>
         <v-card-text>
-          <v-form ref="form" v-model="valid" lazy-validation class="mx-10">
+          <v-form ref="form" v-model="valid" lazy-validation class="mx-10" @submit.prevent="Login()">
             <h1 class="text-center">Login</h1>
             
             <v-text-field
@@ -38,7 +38,7 @@
              required
             ></v-text-field>
 
-            <v-btn block color="primary" class="mr-4 my-6 py-5" @click="Login">
+            <v-btn block color="primary" class="mr-4 my-6 py-5" type="submit" >
               Login
             </v-btn>
           </v-form>
@@ -50,12 +50,14 @@
 </template>
 
 <script>
+//import clientAxios from "@/Config/ConfigAxios.js"
+import axios from 'axios';
 export default {
   name: "Login",
   data() {
     return {
       valid: true,
-      password:'',
+      password:"",
       email: "",
       emailRules: [
         (v) => !!v || "E-mail is required",
@@ -64,7 +66,23 @@ export default {
     };
   },
   methods: {
-    Login() {},
+     async Login() {
+       if(this.email != "" && this.password !=""){
+
+         let data =  {
+           password : this.password,
+           user: this.email
+         }
+         try {
+           const response = await axios.post('http://190.85.232.138/UMG/api/login/Autentication',data)
+          await localStorage.setItem('token',response.data.accessToken);
+           this.$store.commit('loginData',response.data)
+           this.$router.push('/dashboard');
+         } catch (error) {
+           console.log(error);
+         }
+       }
+    },
     back(){
       this.$router.push('/')
     }

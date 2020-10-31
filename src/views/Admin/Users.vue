@@ -1,45 +1,45 @@
 <template>
   <v-row class="justify-center">
     <v-col md="4">
-      <v-card>
-        <v-card-title>Formulario para Facultades</v-card-title>
-        <v-card-text>
-          <v-form>
-            <v-text-field
-              v-model="faculty"
-              label="Nombre usuario"
-              autofocus
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="faculty"
-              label="E-mail usuario"
-              autofocus
-              required
-            ></v-text-field>
-
-            <v-text-field
-              v-model="faculty"
-              label="Contraseña"
-              autofocus
-              required
-            ></v-text-field>
-
-            <v-text-field
-              v-model="faculty"
-              label="Confirmar Contraseña"
-              autofocus
-              required
-            ></v-text-field>
-
-            <div class="d-flex justify-end">
-              <v-btn color="success">Agregar</v-btn>
-            </div>
-          </v-form>
-        </v-card-text>
-      </v-card>
+      <FormUser :dataUser="dataProp" @updateTable="getTable()"></FormUser>
     </v-col>
-    <v-col>
+    <v-col md="7">
+      <div class="mb-5 mx-5">
+        <h2>Acciones Adicionales</h2>
+        <!-- <v-btn color="success">Crear Role</v-btn> -->
+
+        <v-dialog v-model="dialogRole" persistent max-width="290">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="success" dark v-bind="attrs" v-on="on">
+              Crear Role
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title class="headline">
+              Formulario para crear roles de usuario
+            </v-card-title>
+            <v-card-text>
+              <v-form>
+                <v-text-field
+                  v-model="nameRol"
+                  label="Nombre usuario"
+                  autofocus
+                  required
+                ></v-text-field>
+              </v-form>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red darken-1" text @click="dialogRole = false">
+                Cancelar
+              </v-btn>
+              <v-btn color="blue darken-2" text @click="dialogRole = false">
+                Crear
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
       <v-data-table
         :headers="headers"
         :items="desserts"
@@ -66,7 +66,7 @@
             <v-btn color="blue darken-1" dark @click="closeDelete"
               >Cancel</v-btn
             >
-            <v-btn color="red darken-1" dark @click="deleteItemConfirm"
+            <v-btn color="red darken-1" dark @click="deleteItemConfirm()"
               >OK</v-btn
             >
             <v-spacer></v-spacer>
@@ -78,11 +78,21 @@
 </template>
 
 <script>
+import clientAxios from "@/Config/ConfigAxios"
+import FormUser from "@/components/UI/Admin/FormUser.vue"
 export default {
   name: "user",
+  components:{
+    FormUser
+  },
   data() {
     return {
-      faculty: "",
+      deleteId:'',
+      dataProp:'hello',
+     
+      nameRol:"",
+      //modales
+      dialogRole: false,
       dialogDelete: false,
       loadingTable: false,
       headers: [
@@ -92,37 +102,10 @@ export default {
           sortable: false,
           value: "code",
         },
-        { text: "Nombre", value: "faculty" },
         { text: "Email", value: "email" },
         { text: "Acciones", value: "id" },
       ],
-      desserts: [
-        {
-          code: "123-456-11",
-          faculty: "Lorem, ipsum dolor.",
-          email: "ejemplo@ejemplo.com",
-          id: "1",
-        },
-        {
-          code: "123-456-11",
-          faculty: "Lorem, ipsum dolor.",
-          email: "ejemplo@ejemplo.com",
-          id: "2",
-        },
-        {
-          code: "123-456-11",
-          faculty: "Lorem, ipsum dolor.",
-          email: "ejemplo@ejemplo.com",
-          id: "3",
-        },
-        {
-          code: "123-456-11",
-          faculty: "Lorem, ipsum dolor.",
-          email: "ejemplo@ejemplo.com",
-
-          id: "4",
-        },
-      ],
+      desserts: [],
     };
   },
   watch: {
@@ -130,17 +113,57 @@ export default {
       val || this.closeDelete();
     },
   },
+  mounted() {
+    this.getTable();
+  },
   methods: {
-    editItem(item) {
-      console.log(item);
+     async getTable(){
+      this.desserts = [];
+      try{
+        let response = await clientAxios.get('/api/users');
+        response.data.forEach(item => {
+          let temp = {
+            code:item.userId,
+            email:item.user,
+            id:item.personId
+          }
+          this.desserts.push(temp);
+        });
+        // console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
     },
+    async editItem(item) {
+      try {
+        let response = await clientAxios.get(`api/persons/${item.id}`);
+        let temp = [response.data,item]
+        
+        this.dataProp = temp;
+        // console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+      // console.log(item);
+    },
+   
 
-    deleteItem(item) {
+     deleteItem(item) {
       // this.editedItem = Object.assign({}, item)
-      console.log(item);
+     this.deleteId = item.id
       this.dialogDelete = true;
     },
-    deleteItemConfirm() {
+    async deleteItemConfirm() {
+      try {
+        
+        await clientAxios.delete(`api/users/${this.deleteId}`)
+        this.deleteId= "";
+        this.getTable();
+        // console.log(response);
+      } catch (error) {
+       console.log(error); 
+      }
+
       this.closeDelete();
     },
     closeDelete() {

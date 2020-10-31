@@ -83,10 +83,12 @@
       </v-col>
       <v-col>
         <v-carousel v-model="model" :cycle="true" :interval="3000">
-          <v-carousel-item v-for="(color, i) in colors" :key="color">
-            <v-sheet :color="color" height="100%" tile>
+          <v-carousel-item v-for="(item, i) in faculty" :key="i">
+            <v-sheet color="primary"  height="100%" tile>
               <v-row class="fill-height" align="center" justify="center">
-                <div class="display-3">Slide {{ i + 1 }}
+                <div class="display-2 mx-5">Facultad 
+                  <br>
+                  {{item.name }}
                 </div>
               </v-row>
             </v-sheet>
@@ -121,18 +123,23 @@
 </template>
 
 <script>
+import clientAxios from "@/Config/ConfigAxios.js"
 export default {
   name:"Guest-Home",
    data: () => ({
       model: 0,
-      colors: [
-        'primary',
-        'secondary',
-        'yellow darken-2',
-        'red',
-        'orange',
-      ],
+      faculty:[],
+      
     }),
+    mounted() {
+      this.getFaculty();
+    },
+    methods: {
+      async getFaculty(){
+        let response = await clientAxios.get('api/facultities')
+        this.faculty = response.data;
+      }
+    },
 };
 </script>
 

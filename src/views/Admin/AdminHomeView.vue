@@ -8,12 +8,13 @@
 
       <v-spacer></v-spacer>
 
-      <v-badge :content="messages" :value="messages" color="green" overlap>
+      <v-badge class="mx-5"  :content="messages" :value="messages" color="green" overlap>
         <v-icon large> mdi-bell </v-icon>
       </v-badge>
+      <v-btn color="red" dark @click="Logout()">Cerrar sesion</v-btn>
     </v-app-bar>
 
-    <v-main class="test">
+    <v-main >
       <v-navigation-drawer
         v-if="isAuthenticated"
         v-model="drawer"
@@ -56,7 +57,7 @@
         </v-list>
       </v-navigation-drawer>
       <!-- Provides the application the proper gutter -->
-      <v-container fluid>
+      <v-container fluid class="color-guest">
         <!-- If using vue-router -->
         <router-view> </router-view>
       </v-container>
@@ -65,10 +66,13 @@
 </template>
 
 <script>
+import authToken from '../../Config/AuthToken';
+
 export default {
   data: () => ({
     isAuthenticated: true,
     drawer: true,
+    currentUser:'',
     group: null,
     messages: 0,
     items: [
@@ -90,8 +94,24 @@ export default {
       this.drawer = false;
     },
   },
+  mounted() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      authToken(token);
+    }
+  },
+  methods: {
+    Logout(){
+      localStorage.removeItem('token');
+      this.$router.push('/login')
+    }
+  },
+ 
 };
 </script>
 
 <style>
+.color-guest {
+  background: #edf2f7 !important;
+}
 </style>

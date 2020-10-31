@@ -6,10 +6,19 @@
 </template>
 
 <script>
+import authToken from './Config/AuthToken';
+
+
 export default {
   name: "App",
 
   components: {},
+  mounted() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      authToken(token);
+    }
+  },
 
   // computed: {
   //   isAuthenticated() {

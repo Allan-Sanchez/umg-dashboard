@@ -10,6 +10,9 @@ const routes = [
   {
     path: '/',
     name: 'Guest',
+    meta:{
+      requiresGuest:true
+    },
     component: Home,
     children:[
       {
@@ -32,6 +35,9 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Admin-home',
+    meta:{
+      requiresAuth:true
+    },
     component:AdminHomeView,
     children: [
       {
@@ -65,6 +71,9 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
+    meta:{
+      requiresGuest:true
+    },
     component: () => import(/* webpackChunkName: "about" */ '../views/Invitado/Login.vue')
   }
 ]
@@ -74,5 +83,40 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+//nav guards
+router.beforeEach((to,from,next) => {
+  // check for requiredAuth guard
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // check i not logged in
+    if (!localStorage.getItem('token')) {
+      next({
+        path:'/login',
+        query:{
+          redirect: to.fullPath
+        }
+      });
+    }else{
+      next();
+    }
+  }
+  else if(to.matched.some(record => record.meta.requiresGuest)){
+       // check i not logged in
+    if (localStorage.getItem('token')) {
+      next({
+        path:'/dashboard',
+        query:{
+          redirect: to.fullPath
+        }
+      });
+    }else{
+      // proceed to route
+      next();
+    }
+  }else{
+    // proceed to route
+    next();
+  }
+});
 
 export default router
